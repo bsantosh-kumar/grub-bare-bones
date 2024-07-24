@@ -87,7 +87,7 @@ void terminal_put_string(const char *s){
 
 
 void initalize_terminal(){
-	default_color = vga_entry_color(VGA_COLOR_RED,VGA_COLOR_LIGHT_GREY);
+	default_color = vga_entry_color(VGA_COLOR_RED,VGA_COLOR_BLACK);
 	terminal_buffer = (uint16_t*)0xb8000;
 	for(uint8_t i=0;i<VGA_HEIGHT;++i){
 		for(uint8_t j=0;j<VGA_WIDTH;++j){
