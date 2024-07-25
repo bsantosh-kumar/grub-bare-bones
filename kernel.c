@@ -201,6 +201,6 @@ void kernel_main()
 	terminal_put_string("24 Welcome to SanOS Welcome to SanOS Welcome to SanOS Welcome to SanOS Welcome \n");
 	terminal_put_string("25 Welcome to SanOS Welcome to SanOS Welcome to SanOS Welcome to SanOS Welcome \n");
 	terminal_put_string("26 Welcome to SanOS Welcome to SanOS Welcome to SanOS Welcome to SanOS Welcome \0");
-	// terminal_put_string("26 Welcome to SanOS Welcome to SanOS Welcome to SanOS Welcome to SanOS Welcome \0");
+	terminal_put_string("26 Welcome to SanOS Welcome to SanOS Welcome to SanOS Welcome to SanOS Welcome \0");
 	//  terminal_put_string("26 Welcome to SanOS Welcome to SanOS Welcome to SanOS Welcome to SanOS Welcome \n");
 }
