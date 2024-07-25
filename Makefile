@@ -1,22 +1,28 @@
 LINKER_FLAGS := -T linker.ld -nostdlib -lgcc -ffreestanding -O2
 KERNEL_FLAGS := -c -ffreestanding -O2 -Wall -Wextra -std=gnu99
+OS := sanOS
+KERNEL := kernel
+BOOT := boot
 
-all: sanOS.bin
 
-grub: sanOS.bin grub.cfg
-	mkdir -p isodir/boot/grub/
-	cp sanOS.bin isodir/boot/sanOS.bin
-	cp grub.cfg isodir/boot/grub/grub.cfg 
-	grub-mkrescue -o sanOS.iso isodir
+all: $(OS).bin
 
-sanOS.bin: kernel.o boot.o
+grub: $(OS).bin grub.cfg
+	mkdir -p isodir/$(BOOT)/grub/
+	cp $(OS).bin isodir/$(BOOT)/$(OS).bin
+	cp grub.cfg isodir/$(BOOT)/grub/grub.cfg 
+	grub-mkrescue -o $(OS).iso isodir
+
+$(OS).bin: $(KERNEL).o $(BOOT).o
 	i686-elf-gcc $(LINKER_FLAGS) -o $@ $^
 
-kernel.o: kernel.c
+$(KERNEL).o: $(KERNEL).c
 	i686-elf-gcc $(KERNEL_FLAGS) -o $@ $^ 
-boot.o: boot.s
+$(BOOT).o: $(BOOT).s
 	i686-elf-as $< -o $@
-qemu: sanOS.bin
+qemu-kernel: $(OS).bin
 	qemu-system-i386 -kernel $<
+qemu-grub: grub 
+	qemu-system-i386 -cdrom $(OS).bin
 clean:
 	rm -rf *.o *.bin
