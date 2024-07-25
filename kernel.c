@@ -57,23 +57,39 @@ size_t terminal_row = 0;
 size_t terminal_col = 0;
 
 static inline size_t get_index(size_t row,size_t col){
+		
 	return VGA_WIDTH*row + col;
 }
 
-void update_cursor_position(){
-	if(++terminal_col==VGA_WIDTH){
+void update_cursor_position(int pos){
+	if(pos==-1){ //this means new line
 		terminal_col = 0;
-		if(++terminal_row==VGA_HEIGHT){
+		if(++terminal_row==VGA_HEIGHT)
 			terminal_row = 0;
-		}
+		return ;
 	}
+	if(pos<0) //this shouldn't happen 
+		return ;
+	int indx = (get_index(terminal_row,terminal_col)+pos)% (VGA_WIDTH * VGA_HEIGHT);
+	terminal_row = indx/VGA_WIDTH;
+	terminal_col = indx%VGA_WIDTH;
+}
+/*This checks for whitespace, if yes then moves the cursor accordingly*/
+static bool check_space(const char c){
+	if(c=='\n'){
+		update_cursor_position(-1);
+		return true;
+	}
+	else return false;
 }
 
 void terminal_put_char(const char c){
+	//based on whitespace character we get skip printing
+	if(check_space(c)) return ;
+	size_t idx = get_index(terminal_row,terminal_col);
 	uint16_t currEntry = vga_entry(c,default_color);
-	size_t idx = get_index(terminal_row, terminal_col);
 	terminal_buffer[idx]=currEntry;
-	update_cursor_position();
+	update_cursor_position(1);
 }
 
 void terminal_put(const char *s, size_t len){
@@ -98,5 +114,5 @@ void initalize_terminal(){
 
 void kernel_main(){
 	initalize_terminal();
-	terminal_put_string("Welcome to SanOS");
+	terminal_put_string("Welcome to SanOS\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nn\n\n\n\n\nn\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSomething here\n Somethere else here");
 }
